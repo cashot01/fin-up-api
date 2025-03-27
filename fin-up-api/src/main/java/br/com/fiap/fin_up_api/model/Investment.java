@@ -1,17 +1,20 @@
 package br.com.fiap.fin_up_api.model;
 
-import java.util.Random;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+
+import java.util.Random;
+@Entity
 public class Investment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String icon;
 
-    public Investment(Long id, String name, String icon) {
-        this.id = Math.abs(new Random().nextLong());
-        this.name = name;
-        this.icon = icon;
-    }
 
     public Long getId() {
         return id;
@@ -23,5 +26,14 @@ public class Investment {
 
     public String getIcon() {
         return icon;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return id + " - " + name + " - " + icon;
     }
 }
