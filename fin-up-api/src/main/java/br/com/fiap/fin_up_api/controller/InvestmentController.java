@@ -2,6 +2,7 @@ package br.com.fiap.fin_up_api.controller;
 
 import br.com.fiap.fin_up_api.model.Investment;
 import br.com.fiap.fin_up_api.repository.InvestmentRepository;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class InvestmentController {
     // cadastrar investimento
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Investment create(@RequestBody Investment investment){
+    public Investment create(@RequestBody @Valid Investment investment){
         log.info("Cadastrando Investimento " + investment.getName());
         return repository.save(investment);
 
@@ -54,7 +55,7 @@ public class InvestmentController {
     }
 
     @PutMapping("{id}")
-    public Investment update(@PathVariable Long id, @RequestBody Investment investment) {
+    public Investment update(@PathVariable Long id, @RequestBody @Valid Investment investment) {
         log.info("Atualizando investimento " + id + " " + investment);
 
         getInvestment(id);
