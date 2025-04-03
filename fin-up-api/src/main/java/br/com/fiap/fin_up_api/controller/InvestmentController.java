@@ -2,10 +2,14 @@ package br.com.fiap.fin_up_api.controller;
 
 import br.com.fiap.fin_up_api.model.Investment;
 import br.com.fiap.fin_up_api.repository.InvestmentRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +30,13 @@ public class InvestmentController {
     // listando os investimentos
     // metodo get :8080/investments -> json
     @GetMapping
+    @Cacheable("investments")
+    @Operation(
+            description = "Listar todos os investimentos",
+            tags = "investments",
+            summary = "Lista dos Investimentos",
+            hidden = true
+    )
     public List<Investment> index(){
         log.info("Buscando todos investimentos");
         return repository.findAll();
@@ -33,7 +44,11 @@ public class InvestmentController {
 
     // cadastrar investimento
     @PostMapping
+    @CacheEvict(value = "investments", allEntries = true)
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(responses = {
+            @ApiResponse(responseCode = "400", description = "Falha na Validação")
+    })
     public Investment create(@RequestBody @Valid Investment investment){
         log.info("Cadastrando Investimento " + investment.getName());
         return repository.save(investment);
