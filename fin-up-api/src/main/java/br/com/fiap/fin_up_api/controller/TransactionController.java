@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,28 +22,18 @@ import java.util.List;
 @Slf4j
 public class TransactionController {
 
-    record TransactionFilter(String description, LocalDate date, BigDecimal amount){}
+    public record TransactionFilter(String description, LocalDate startDate, LocalDate endDate) {
+    }
 
     @Autowired
     private TransactionRepository repository;
 
     @GetMapping
-    public List<Transaction> index(TransactionFilter filter){
-        log.info("Buscando transações com descrição {} e data {}", filter.description(), filter.date());
-
-        var probe = Transaction.builder()
-                .description(filter.description())
-                .date(filter.date())
-                .amount(filter.amount())
-                .build();
-
-        var matcher = ExampleMatcher
-                .matchingAll()
-                .withIgnoreCase()
-                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
-
-        var example = Example.of(probe, matcher);
-        return repository.findAll(example);
+    public Page<Transaction> index(TransactionFilter filter,
+                                   @PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable) {
+        var specification = TransactionSpecification.withFilters(filter);
+        return repository.findAll(specification, pageable);
+    }
     }
 
 }
