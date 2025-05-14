@@ -3,8 +3,10 @@ package br.com.fiap.fin_up_api.config;
 import br.com.fiap.fin_up_api.model.*;
 import br.com.fiap.fin_up_api.repository.InvestmentRepository;
 import br.com.fiap.fin_up_api.repository.TransactionRepository;
+import br.com.fiap.fin_up_api.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
