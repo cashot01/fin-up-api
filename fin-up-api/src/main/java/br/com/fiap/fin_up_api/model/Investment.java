@@ -1,9 +1,7 @@
 package br.com.fiap.fin_up_api.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -29,5 +27,9 @@ public class Investment {
     @NotBlank(message = "campo obrigatório")
     @Pattern(regexp = "^[A-Z].*", message = "deve começar com maiúscula")
     private String icon;
+
+    @ManyToOne
+    @JsonIgnore
+    private User user;
 
 }
