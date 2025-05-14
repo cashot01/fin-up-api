@@ -1,14 +1,19 @@
 package br.com.fiap.fin_up_api.service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+
+import br.com.fiap.fin_up_api.model.Credentials;
 import br.com.fiap.fin_up_api.model.Token;
 import br.com.fiap.fin_up_api.model.User;
 import br.com.fiap.fin_up_api.model.UserRole;
 import jakarta.annotation.PostConstruct;
-import lombok.Value;
-import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 @Service
 public class TokenService {
