@@ -1,8 +1,6 @@
 package br.com.fiap.fin_up_api.config;
 
-import br.com.fiap.fin_up_api.model.Investment;
-import br.com.fiap.fin_up_api.model.Transaction;
-import br.com.fiap.fin_up_api.model.TransactionType;
+import br.com.fiap.fin_up_api.model.*;
 import br.com.fiap.fin_up_api.repository.InvestmentRepository;
 import br.com.fiap.fin_up_api.repository.TransactionRepository;
 import jakarta.annotation.PostConstruct;
@@ -24,7 +22,29 @@ public class DatabaseSeeder {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @PostConstruct
     public void init() {
+        var cauan = User.builder()
+                .email("cauan@fiap.com.br")
+                .password(passwordEncoder.encode("12345"))
+                .role(UserRole.ADMIN)
+                .build();
+
+        var mateus = User.builder()
+                .email("mateus@fiap.com.br")
+                .password(passwordEncoder.encode("12345"))
+                .role(UserRole.USER)
+                .build();
+
+        userRepository.saveAll(List.of(cauan, mateus));
+
+
         var investments = List.of(
                 Investment.builder().name("Renda Fixa").icon("Book").build(),
                 Investment.builder().name("Dollar Americano").icon("Dices").build(),
